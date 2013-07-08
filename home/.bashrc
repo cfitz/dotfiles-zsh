@@ -1,3 +1,7 @@
+
+source /usr/local/share/chruby/chruby.sh
+chruby ruby-1.9
+
 # source global definitions
 if [ -f /etc/bashrc ]; then
     source /etc/bashrc
@@ -5,7 +9,7 @@ fi
 
 # sets shell options
 shopt -s cdspell checkwinsize
-shopt -s globstar extglob extquote
+# shopt -s globstar extglob extquote
 shopt -s histappend cmdhist
 set -o vi
 
