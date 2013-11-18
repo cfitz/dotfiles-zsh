@@ -1,6 +1,6 @@
 
 source /usr/local/share/chruby/chruby.sh
-chruby ruby-1.9
+chruby ruby
 
 # source global definitions
 if [ -f /etc/bashrc ]; then
