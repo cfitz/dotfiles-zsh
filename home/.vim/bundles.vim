@@ -25,7 +25,7 @@ Bundle 'zaiste/tmux.vim'
 Bundle 'tpope/vim-repeat'
 Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-bundler'
-
-
+Bundle 'scrooloose/nerdtree'
+Bundle 'vim-scripts/TailMinusF'
 
 filetype plugin indent on

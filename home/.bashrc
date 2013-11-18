@@ -1,10 +1,14 @@
-
+ export PATH=/usr/local/opt/postgresql/bin:$PATH 
 source /usr/local/share/chruby/chruby.sh
-chruby ruby-1.9
+chruby ruby-2.0.0-p247 
 
 # source global definitions
 if [ -f /etc/bashrc ]; then
     source /etc/bashrc
+fi
+
+if [ -f /etc/google_creds ]; then
+    source /etc/google_creds
 fi
 
 # sets shell options
@@ -42,9 +46,10 @@ LS_COLORS='no=0:di=34:fi=0:ln=35:ex=31:so=32:pi=33'
 test $(uname) = 'Linux' && alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 
-EDITOR=vim
+#EDITOR=vim
 PS1='\[\e[32m\]\h:\W$\[\e[0m\] '
-PATH=~/bin:/usr/local/bin:$PATH
+PATH=~/bin:/usr/local/bin:/usr/local/share/npm/bin:$PATH
+
 
 # sources bash completion scripts
 if [ -e /usr/local/bin/brew ] && [ -f $(brew --prefix)/etc/bash_completion ]; then
