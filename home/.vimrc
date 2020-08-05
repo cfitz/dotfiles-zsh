@@ -1,120 +1,386 @@
-source ~/.vim/bundles.vim
+set nocompatible               " be iMproved
 
-set nocompatible
-set encoding=utf-8
+"  ---------------------------------------------------------------------------
+"  Plugins
+"  ---------------------------------------------------------------------------
 
-" enable syntax highlighting and file type detection
+silent! runtime bundles.vim
+
+"  ---------------------------------------------------------------------------
+"  General
+"  ---------------------------------------------------------------------------
+
+filetype plugin indent on     
+let mapleader = ","
+let g:mapleader = ","
+set modelines=0
+set history=1000
+set nobackup
+set nowritebackup
+set noswapfile
 syntax enable
-filetype plugin indent on
+set autoread
 
-" display the mode
+"  ---------------------------------------------------------------------------
+"  UI
+"  ---------------------------------------------------------------------------
+
+set title
+set encoding=utf-8
+set scrolloff=3
+set autoindent
+set smartindent
 set showmode
-
-" enable backspace over auto-indention and line breaks
-set backspace=indent,eol,start
-
-" enable abandoned buffers to be hidden vs unloaded
+set showcmd
 set hidden
-
-" enable command line completion
 set wildmenu
 set wildmode=list:longest
+set visualbell
+set cursorline
+set ttyfast
+set ruler
+set backspace=indent,eol,start
+set laststatus=2
+set number
+" set relativenumber
+set undofile
 
-" enable search highlighting and smartcase matching
-set incsearch
-set hlsearch
+" Auto adjust window sizes when they become current
+set winwidth=84
+set winheight=5
+set winminheight=5
+set winheight=999
+
+colorscheme eighties 
+set background=dark
+set t_Co=256
+
+set splitbelow splitright
+
+"  ---------------------------------------------------------------------------
+"  Text Formatting
+"  ---------------------------------------------------------------------------
+
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
+set expandtab
+
+set nowrap
+set textwidth=79
+set formatoptions=n
+
+" check to make sure vim has been compiled with colorcolumn support
+" before enabling it
+if exists("+colorcolumn")
+  highlight ColorColumn ctermbg=246
+  let &colorcolumn=join(range(81,999),",")
+endif
+
+"  ---------------------------------------------------------------------------
+"  Status Line
+"  ---------------------------------------------------------------------------
+
+" path
+set statusline=%f
+" flags
+set statusline+=%m%r%h%w
+" git branch
+set statusline+=\ %{fugitive#statusline()}
+" encoding
+set statusline+=\ [%{strlen(&fenc)?&fenc:&enc}]
+" rvm
+" set statusline+=\ %{rvm#statusline()}
+" line x of y
+set statusline+=\ [line\ %l\/%L]
+
+" Colour
+hi StatusLine ctermfg=Black ctermbg=White
+
+" Change colour of statusline in insert mode
+au InsertEnter * hi StatusLine ctermbg=DarkBlue
+au InsertLeave * hi StatusLine ctermfg=Black ctermbg=White
+
+"  ---------------------------------------------------------------------------
+"  Mappings
+"  ---------------------------------------------------------------------------
+
+" Searching / moving
+nnoremap / /\v
+vnoremap / /\v
 set ignorecase
 set smartcase
+set incsearch
+set showmatch
+set hlsearch
+" turn search highlight off
+nnoremap <leader><space> :noh<cr> 
+" search (forwards)
+nmap <space> /
+" search (backwards)
+map <c-space> ?
 
-" enable line numbers
-set number
+" Center screen when scrolling search results
+nmap n nzz
+nmap N Nzz
 
-" configure status line
-set laststatus=2
-set statusline=%f\ %y%m%{fugitive#statusline()}%=%l,%c%V
+imap <C-h> <ESC>^
+imap <C-l> <ESC>$
 
-" set whitespace characters (tabs and trailing spaces)
-set nolist listchars=tab:»\ ,trail:·
+" Turn off arrow keys (this might not be a good idea for beginners, but it is
+" the best way to ween yourself of arrow keys on to hjkl)
+" http://yehudakatz.com/2010/07/29/everyone-who-tried-to-convince-me-to-use-vim-was-wrong/
+nnoremap <Left> :echoe "Use h"<CR>
+nnoremap <Right> :echoe "Use l"<CR>
+nnoremap <Up> :echoe "Use k"<CR>
+nnoremap <Down> :echoe "Use j"<CR>"
+inoremap <up> <nop>
+inoremap <down> <nop>
+inoremap <left> <nop>
+inoremap <right> <nop>
 
-" enable line wrapping breaking at word boundaries
-set wrap
-set linebreak
+nnoremap j gj
+nnoremap k gk
 
-" enable 5 lines of context around the cursor
-set scrolloff=5
+" Map ESC
+imap jj <ESC>
 
-" disable backups and swap files
-set nobackup
-set noswapfile
+" ACK
+set grepprg=ack
 
-set expandtab
-set softtabstop=4
-set tabstop=4
-set shiftwidth=4
+" ,a to Ack (search in files)
+nnoremap <leader>a :Ack 
 
-" set default color scheme
-set background=dark
-colorscheme eighties
+" Ack settings: https://github.com/krisleech/vimfiles/wiki/Make-ack-ignore-files
 
-" set defaults for folding
-set foldmethod=indent
-set foldnestmax=3
-set nofoldenable
-set foldlevel=1
+" Auto format
+map === mmgg=G`m^zz
 
-" set clipboard to use unnamed register
-set clipboard=unnamed
-
-" set file type specifics (move to ftplugin)
-autocmd FileType tmux setlocal commentstring=#\ %s
-autocmd BufReadPost fugitive://* set bufhidden=delete
-
-" setup tailored key mappings
-let mapleader = ','
-nnoremap <CR> :noh<CR><CR>
-inoremap jk <ESC>
-noremap <leader>s ?{<CR>jV/^\s*\}\=$<CR>k:sort<CR>:let @/=''<CR>
-
-nnoremap <leader>- :t.<CR>:s/./-/g<CR>:noh<CR><CR>
-nnoremap <leader>= :t.<CR>:s/./=/g<CR>:noh<CR><CR>
-nnoremap <leader>d "=strftime("%m/%d/%Y")<CR>p
-
-nnoremap <leader>ev :edit $MYVIMRC<cr>
-nnoremap <leader>sv :source $MYVIMRC<cr>
-
-nnoremap <leader>bc :Bclose<CR>
-nnoremap <leader>w :write<CR>
-
+" Move between splits
 nnoremap <C-h> <C-w>h
-nnoremap <C-l> <C-w>l
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
 
-inoremap <leader>u <esc>gUiwea
-inoremap <C-e> <C-o>$
-inoremap <C-a> <C-o>0
+" Move lines up and down
+" map <C-J> :m +1 <CR>
+" map <C-K> :m -2 <CR>
 
-" define settings for emmet
-let g:user_emmet_settings = {'html': {'empty_element_suffix': '>'}}
+" Switch between buffers
+noremap <tab> :bn<CR>
+noremap <S-tab> :bp<CR>
+" close buffer
+nmap <leader>d :bd<CR>
+" close all buffers
+nmap <leader>D :bufdo bd<CR>
 
-" ignore npm and bower directories for ctrlp
-let g:ctrlp_custom_ignore = {
-			\ 'dir': '\v[\/](node_modules|bower_components|www|coverage)$'
-			\ }
+" Switch between last two buffers
+nnoremap <leader><leader> <c-^>
 
-" hide statusline in ctrlp buffer
-let g:ctrlp_buffer_func = {
-			\ 'enter': 'HideStatusLine',
-			\ 'exit':  'ShowStatusLine',
-			\ }
+" Edit/View files relative to current directory
+cnoremap %% <C-R>=expand('%:h').'/'<cr>
+map <leader>e :edit %%
+map <leader>v :view %%
 
-func! HideStatusLine()
-	set laststatus=0
-endfunc
+" Ignore some binary, versioning and backup files when auto-completing
+set wildignore=.svn,CVS,.git,*.swp,*.jpg,*.png,*.gif,*.pdf,*.bak
+" Set a lower priority for .old files
+set suffixes+=.old
 
-func! ShowStatusLine()
-	set laststatus=2
-endfunc
+" Saving and exit
+nmap <leader>q :wqa!<CR>
+nmap <leader>w :w!<CR>
+nmap <leader><Esc> :q!<CR>
 
-let g:syntastic_html_checkers=['']
+" EXTERNAL COPY / PASTE
+" Press F2 before and after pasting from an external Window, not required for
+" MacVim
+set pastetoggle=<F2>
+map <C-v> "+gP<CR>
+vmap <C-c> "+y
+
+"  ---------------------------------------------------------------------------
+"  Function Keys
+"  ---------------------------------------------------------------------------
+
+" F2 - Terminal
+map <F2> :ConqueTerm zsh<CR>
+
+" F3 - YankRing
+nnoremap <silent> <F3> :YRShow<cr>
+inoremap <silent> <F3> <ESC>:YRShow<cr>
+
+let g:yankring_history_dir = '/tmp'
+
+" Press F5 to toggle GUndo tree
+nnoremap <F5> :GundoToggle<CR>
+
+" indent file and return cursor and center cursor
+map   <silent> <F6> mmgg=G`m^zz
+imap  <silent> <F6> <Esc> mmgg=G`m^zz
+
+"  ---------------------------------------------------------------------------
+"  Plugins
+"  ---------------------------------------------------------------------------
+
+" Command-T
+" find file
+map <leader>f :CommandTFlush<cr>\|:CommandT<cr>
+
+" find file in current directory
+map <leader>gf :CommandTFlush<cr>\|:CommandT %%<cr>
+
+let g:CommandTMaxHeight = 20
+
+" NERDTree
+let NERDTreeShowBookmarks = 0
+let NERDChristmasTree = 1
+let NERDTreeWinPos = "left"
+let NERDTreeHijackNetrw = 1
+let NERDTreeQuitOnOpen = 1
+let NERDTreeWinSize = 50 
+let NERDTreeChDirMode = 2
+let NERDTreeDirArrows = 1
+" open file browser
+map <leader>p :NERDTreeToggle<cr>
+
+" TagList
+set tags=./tags;
+" Support for https://github.com/ivalkeen/guard-ctags-bundler
+set tags+=gems.tags
+map <leader>l :TlistToggle <cr>
+let Tlist_Use_Right_Window = 1
+let Tlist_WinWidth = 60
+" Generate ctags for all bundled gems as well
+map <leader>rt :!ctags --extra=+f --languages=-javascript --exclude=.git --exclude=log -R * `rvm gemdir`/gems/* `rvm gemdir`/bundler/gems/*<CR><C-M>
+
+" Use only current file to autocomplete from tags
+" set complete=.,t
+set complete=.,w,b,u,t,i
+
+" Buffer window (find file in open buffers)
+nmap <silent> <leader>b :FufBuffer<CR>
+
+" AutoClose
+let g:AutoClosePairs = {'(': ')', '{': '}', '[': ']', '"': '"', "'": "'", '#{': '}'} 
+let g:AutoCloseProtectedRegions = ["Character"] 
+
+let my_home = expand("$HOME/")
+
+if filereadable(my_home . '.vim/bundle/vim-autocorrect/autocorrect.vim')
+  source ~/.vim/bundle/vim-autocorrect/autocorrect.vim
+endif
+
+" BLAAAME
+vmap <Leader>gb :<C-U>!git blame <C-R>=expand("%:p") <CR> \| sed -n <C-R>=line("'<") <CR>,<C-R>=line("'>") <CR>p<CR>
+
+" Tabularize
+if exists(":Tab")
+  nmap <leader>a\| :Tab /\|<CR>
+  vmap <leader>a\| :Tab /\|<CR>
+  nmap <leader>a= :Tab /=<CR>
+  vmap <leader>a= :Tab /=<CR>
+  nmap <leader>a: :Tab /:\zs<CR>
+  vmap <leader>a: :Tab /:\zs<CR>
+endif
+
+let g:cssColorVimDoNotMessMyUpdatetime = 1
+
+" Easy commenting
+nnoremap // :TComment<CR>
+vnoremap // :TComment<CR>
+
+" Supertab
+let g:SuperTabContextDefaultCompletionType = "<c-x><c-o>"
+
+" Syntastic
+" let g:syntastic_auto_loc_list=1
+" let g:syntastic_auto_jump=1
+
+"  ---------------------------------------------------------------------------
+"  Ruby/Rails
+"  ---------------------------------------------------------------------------
+
+" Execute current buffer as ruby
+map <S-r> :w !ruby<CR>
+
+map <leader>gv :CommandTFlush<cr>\|:CommandT app/views<cr>
+map <leader>gc :CommandTFlush<cr>\|:CommandT app/controllers<cr>
+map <leader>gm :CommandTFlush<cr>\|:CommandT app/models<cr>
+map <leader>gh :CommandTFlush<cr>\|:CommandT app/helpers<cr>
+map <leader>gl :CommandTFlush<cr>\|:CommandT lib<cr>
+map <leader>gp :CommandTFlush<cr>\|:CommandT public<cr>
+map <leader>gs :CommandTFlush<cr>\|:CommandT public/stylesheets<cr>
+map <leader>ga :CommandTFlush<cr>\|:CommandT app/assets<cr>
+
+" View routes or Gemfile in large split
+map <leader>gr :topleft :split config/routes.rb<cr>
+map <leader>gg :topleft 100 :split Gemfile<cr>
+
+" Skip to Model, View or Controller
+map <Leader>m :Rmodel 
+map <Leader>v :Rview 
+map <Leader>c :Rcontroller 
+
+" Other files to consider Ruby
+au BufRead,BufNewFile Gemfile,Rakefile,Thorfile,config.ru,Vagrantfile,Guardfile,Capfile set ft=ruby
+
+"  ---------------------------------------------------------------------------
+"  CoffeeScript
+"  ---------------------------------------------------------------------------
+
+let coffee_compile_vert = 1
+au BufNewFile,BufReadPost *.coffee setl foldmethod=indent
+
+"  ---------------------------------------------------------------------------
+"  SASS / SCSS
+"  ---------------------------------------------------------------------------
+
+au BufNewFile,BufReadPost *.scss setl foldmethod=indent
+au BufNewFile,BufReadPost *.sass setl foldmethod=indent
+au BufRead,BufNewFile *.scss set filetype=scss
+
+"  ---------------------------------------------------------------------------
+"  GUI
+"  ---------------------------------------------------------------------------
+
+if has("gui_running")
+  set guioptions-=T " no toolbar set guioptions-=m " no menus
+  set guioptions-=r " no scrollbar on the right
+  set guioptions-=R " no scrollbar on the right
+  set guioptions-=l " no scrollbar on the left
+  set guioptions-=b " no scrollbar on the bottom
+  set guioptions=aiA 
+  set mouse=v
+  set guifont=Monaco:h12 "<- Maybe a good idea when using mac
+endif
+set guifont=Monaco:h12
+
+"  ---------------------------------------------------------------------------
+"  Directories
+"  ---------------------------------------------------------------------------
+
+set backupdir=~/tmp,/tmp
+set undodir=~/.vim/.tmp,~/tmp,~/.tmp,/tmp
+
+" Ctags path (brew install ctags)
+let Tlist_Ctags_Cmd = 'ctags'
+
+" Make Vim use RVM correctly when using Zsh
+" https://rvm.beginrescueend.com/integration/vim/
+set shell=/bin/sh
+
+" Finally, load custom configs
+if filereadable(my_home . '.vimrc.local')
+  source ~/.vimrc.local
+endif
+
+"  ---------------------------------------------------------------------------
+"  Misc
+"  ---------------------------------------------------------------------------
+
+" When vimrc, either directly or via symlink, is edited, automatically reload it
+autocmd! bufwritepost .vimrc source %
+autocmd! bufwritepost vimrc source %
+
 
